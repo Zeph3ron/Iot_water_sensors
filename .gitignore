@@ -2,3 +2,8 @@
 measurements_log\.txt
 
 __pycache__/
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/vcs.xml
+/.idea/water_measurements.iml
+/.idea/workspace.xml

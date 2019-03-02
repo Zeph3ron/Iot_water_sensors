@@ -19,4 +19,4 @@ cursor = connection.cursor()
 cursor.execute('SELECT * FROM Measurements_raw')
 
 for row in cursor:
-    print(row)
+    print(row.Json_value)
