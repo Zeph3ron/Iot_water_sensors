@@ -6,10 +6,11 @@ import time
 import databasehandler
 import ttn
 import decoder
+import services
 
 # Toggles between using a text-file or the database
 use_database = True
-enable_logging = True
+enable_logging = False
 
 log_path = 'measurements_log.txt'
 collection_file_path = 'message_collection.txt'
@@ -67,7 +68,7 @@ def handle_message(msg):
         log_message('Exception thrown whilst trying to parse the message.')
         traceback.print_exc()
 
-
+#
 def uplink_callback(msg, client):
     log_message(f'Received uplink from: {msg.dev_id}. \n{msg}')
     handle_message(msg)
@@ -95,6 +96,9 @@ def close_callback(res, client):
 
 message_collection = parse_messages()
 house_dict = decoder.parse_house_dict(message_collection)
+
+# house_info = services.get_house_info(house_dict, 'House_0')
+# house_bill = services.get_bill(house_info, 10)
 
 handler = ttn.HandlerClient(app_id, access_key)
 mqtt_client = handler.data()

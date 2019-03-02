@@ -50,10 +50,14 @@ class GateWay:
         self.altitude = altitude
 
 
-class House:
-    def __init__(self, name, value):
+class HouseInfo:
+    def __init__(self, name, minimum, maximum, average, current, total):
         self.name = name
-        self.value = value
+        self.minimum = minimum
+        self.maximum = maximum
+        self.avarage = average
+        self.current = current
+        self.total = total
 
 
 def serialize_message(msg):
