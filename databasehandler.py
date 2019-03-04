@@ -7,7 +7,7 @@ def connect_to_db():
         'server': 'water-measurements.database.windows.net',
         'database': 'water-measurements',
         'username': 'bossman@water-measurements',
-        'password': 'Itu2019!'
+        'password': 'Itu2019!' # NOTE: Password will be changed when repo goes public.
     }
 
     # Connection string is made up using the '.format' method and the details from the dictionary

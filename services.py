@@ -24,14 +24,33 @@ def get_datetime(entry):
     return datetime.strptime(entry[0][0:26], '%Y-%m-%dT%X.%f')
 
 
-def detect_leak(house_array, threshold):
+def detect_leak_simple(house_array, threshold):
     house_info = get_house_info(house_array)
     if house_info.current > threshold:
-        if is_real_leak(house_array, house_info.current, get_datetime(house_array[0])):
+        send_notification_email('email@email.com')
+
+
+def detect_leak_experimental_a(house_array):
+    house_info = get_house_info(house_array)
+    current_time = get_datetime(house_array[-1])
+
+    # Gets the avarage of the two previous days, at the same hour (+- 1 hour)
+    one_day_before_avg = get_house_info(get_entries(house_array, current_time - (datetime.hour * 25), (current_time - (datetime.hour * 23)))).avarage
+    two_days_before_avg = get_house_info(get_entries(house_array, current_time - (datetime.hour * 49), (current_time - (datetime.hour * 47)))).avarage
+
+    if house_info.current > (one_day_before_avg + two_days_before_avg / 2):
+        send_notification_email('email@email.com')
+
+
+def detect_leak_experimental_b(house_array, threshold):
+    house_info = get_house_info(house_array)
+    if house_info.current > threshold:
+        if is_real_leak(house_array, house_info.current, get_datetime(house_array[-1])):
             send_notification_email('email@email.com')
 
 
 def is_real_leak(house_array, current_flow, leak_datetime):
+    # Idea was to check the previous day, and if the same consumption pattern existed (+- 1 hour) it is not a leak.
     entries = get_entries(house_array, leak_datetime - (datetime.hour * 25), (leak_datetime - (datetime.hour * 23)))
     for entry in entries:
         if entry[1] <= current_flow:

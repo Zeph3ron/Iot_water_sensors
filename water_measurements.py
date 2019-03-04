@@ -66,6 +66,8 @@ def handle_message(msg):
             traceback.print_exc()
         log_message('Message successfully handled.')
         decoder.update_house_dict(house_dict, msg)
+        for house in house_dict:
+            services.detect_leak_experimental_a(house)
 
     except Exception:
         log_message('Exception thrown whilst trying to parse the message.')
@@ -101,15 +103,14 @@ def close_callback(res, client):
 
 message_collection = parse_messages()
 house_dict = decoder.parse_house_dict(message_collection)
-bill = services.get_monthly_bill(house_dict['House_0'], 10, datetime(2019, 3, 1), datetime(2019, 4, 1))
-test = services.detect_leak(house_dict['House_0'],1)
-# handler = ttn.HandlerClient(app_id, access_key)
-# mqtt_client = handler.data()
-# mqtt_client.set_uplink_callback(uplink_callback)
-# mqtt_client.set_connect_callback(connect_callback)
-# mqtt_client.set_close_callback(close_callback)
-# mqtt_client.set_downlink_callback(downlink_callback)
-#
-# mqtt_client.connect()
-# time.sleep(4000)
-# mqtt_client.close()
+
+handler = ttn.HandlerClient(app_id, access_key)
+mqtt_client = handler.data()
+mqtt_client.set_uplink_callback(uplink_callback)
+mqtt_client.set_connect_callback(connect_callback)
+mqtt_client.set_close_callback(close_callback)
+mqtt_client.set_downlink_callback(downlink_callback)
+
+mqtt_client.connect()
+time.sleep(4000)
+mqtt_client.close()
