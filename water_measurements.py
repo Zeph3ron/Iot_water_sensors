@@ -1,5 +1,8 @@
+from datetime import datetime
 import json
 import traceback
+from this import s
+
 import jsonpickle
 import models
 import time
@@ -68,7 +71,8 @@ def handle_message(msg):
         log_message('Exception thrown whilst trying to parse the message.')
         traceback.print_exc()
 
-#
+
+# region Callbacks
 def uplink_callback(msg, client):
     log_message(f'Received uplink from: {msg.dev_id}. \n{msg}')
     handle_message(msg)
@@ -92,21 +96,20 @@ def close_callback(res, client):
     else:
         log_message('Failed closing connection.')
     log_message('close_callback - Exited')
+# endregion
 
 
 message_collection = parse_messages()
 house_dict = decoder.parse_house_dict(message_collection)
-
-# house_info = services.get_house_info(house_dict, 'House_0')
-# house_bill = services.get_bill(house_info, 10)
-
-handler = ttn.HandlerClient(app_id, access_key)
-mqtt_client = handler.data()
-mqtt_client.set_uplink_callback(uplink_callback)
-mqtt_client.set_connect_callback(connect_callback)
-mqtt_client.set_close_callback(close_callback)
-mqtt_client.set_downlink_callback(downlink_callback)
-
-mqtt_client.connect()
-time.sleep(4000)
-mqtt_client.close()
+bill = services.get_monthly_bill(house_dict['House_0'], 10, datetime(2019, 3, 1), datetime(2019, 4, 1))
+test = services.detect_leak(house_dict['House_0'],1)
+# handler = ttn.HandlerClient(app_id, access_key)
+# mqtt_client = handler.data()
+# mqtt_client.set_uplink_callback(uplink_callback)
+# mqtt_client.set_connect_callback(connect_callback)
+# mqtt_client.set_close_callback(close_callback)
+# mqtt_client.set_downlink_callback(downlink_callback)
+#
+# mqtt_client.connect()
+# time.sleep(4000)
+# mqtt_client.close()

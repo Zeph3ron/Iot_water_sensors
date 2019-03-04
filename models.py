@@ -51,8 +51,7 @@ class GateWay:
 
 
 class HouseInfo:
-    def __init__(self, name, minimum, maximum, average, current, total):
-        self.name = name
+    def __init__(self, minimum, maximum, average, current, total):
         self.minimum = minimum
         self.maximum = maximum
         self.avarage = average
